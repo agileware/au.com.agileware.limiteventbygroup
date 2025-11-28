@@ -179,6 +179,56 @@ function _limiteventbygroup_civix_fixNavigationMenu(&$nodes) {
   _limiteventbygroup_civix_fixNavigationMenuItems($nodes, $maxNavID, NULL);
 }
 
+/**
+ * Implements hook_civicrm_preProcess().
+ *
+ * @param string $formName
+ * @param \CRM_Core_Form $form
+ */
+function limiteventbygroup_civicrm_preProcess($formName, &$form) {
+  // Only apply logic to the public Event Registration form
+  if ($formName === 'CRM_Event_Form_Registration_Register') {
+    $eventId = $form->get('eventId');
+    $contactId = CRM_Core_Session::getLoggedInContactID();
+    
+    // 1. Get the required group ID from the custom field.
+    $customFieldGroupId = civicrm_api3('CustomValue', 'getvalue', [
+      'entity_id' => $eventId,
+      // Use the column_name defined in your managed file
+      'return' => 'limit_group_id', 
+      'custom_group_id' => 'Limit_Event_Group_Settings',
+    ]);
+
+    // 2. Check for 'no group set' (anyone can register)
+    if (empty($customFieldGroupId)) {
+      return; 
+    }
+
+    // 3. Check for logged-in user requirement
+    if (!$contactId) {
+      $message = 'You must be logged in to register for this event.';
+      CRM_Utils_System::setStatus($message, 'error');
+      // Redirect to the event info page
+      CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "id=$eventId"));
+      return;
+    }
+
+    // 4. Check if the logged-in user is in the required group.
+    $isMember = (bool) civicrm_api3('GroupContact', 'getcount', [
+      'group_id' => $customFieldGroupId,
+      'contact_id' => $contactId,
+      'status' => ['in' => ['Added', 'Pending']],
+    ]);
+
+    if (!$isMember) {
+      // User is logged in but not a member. Block access.
+      $message = 'Event registration is limited to members of a specific contact group. You do not have permission to register.';
+      CRM_Utils_System::setStatus($message, 'error');
+      CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "id=$eventId"));
+    }
+  }
+}
+
 function _limiteventbygroup_civix_fixNavigationMenuItems(&$nodes, &$maxNavID, $parentID) {
   $origKeys = array_keys($nodes);
   foreach ($origKeys as $origKey) {

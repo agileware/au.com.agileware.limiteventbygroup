@@ -22,18 +22,7 @@ function limiteventbygroup_civicrm_config(\CRM_Core_Config $config): void {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_install
  */
 function limiteventbygroup_civicrm_install(): void {
-  // This calls the code in install/limiteventbygroup_install.php
   _limiteventbygroup_civix_civicrm_install();
-}
-
-/**
- * Implements hook_civicrm_uninstall().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_uninstall
- */
-function limiteventbygroup_civicrm_uninstall(): void {
-  // This calls the code in install/limiteventbygroup_install.php
-  _limiteventbygroup_civix_civicrm_uninstall();
 }
 
 /**
@@ -44,4 +33,28 @@ function limiteventbygroup_civicrm_uninstall(): void {
 function limiteventbygroup_civicrm_enable(): void {
   _limiteventbygroup_civix_civicrm_enable();
 }
-// Other hooks go here
+
+/**
+ * Implements hook_civicrm_managed().
+ *
+ * @param array $entities
+ */
+function limiteventbygroup_civicrm_managed(&$entities) {
+  $fullKey = 'au.com.agileware.limiteventbygroup'; 
+
+  $entities[] = [
+    // Outer Array (to satisfy strict parsing)
+    'module' => $fullKey,
+    'name' => 'CustomGroupAndField',
+    'entity' => 'File',
+    'filename' => 'managed/CustomGroupAndField.php',
+
+    // Inner Params Array (the actual definition)
+    'params' => [
+      'module' => $fullKey,
+      'name' => 'CustomGroupAndField',
+      'entity' => 'File',
+      'filename' => 'managed/CustomGroupAndField.php',
+    ],
+  ];
+}
