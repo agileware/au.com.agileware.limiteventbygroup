@@ -2,41 +2,26 @@
 <extension key="au.com.agileware.limiteventbygroup" type="module">
   <file>limiteventbygroup</file>
   <name>Limit Event By Group</name>
-  <description>FIXME</description>
+  <description>CiviCRM extension which restricts CiviCRM event registration to members of a specified group </description>
   <license>AGPL-3.0</license>
   <authors>
     <author>
-      <name>DDEV User</name>
-      <email>nobody@example.com</email>
-      <role>Maintainer</role>
+      <name>Agileware</name>
+      <email>support@agileware.com.au</email>
     </author>
   </authors>
   <urls>
-    <url desc="Main Extension Page">https://FIXME</url>
-    <url desc="Documentation">https://FIXME</url>
-    <url desc="Support">https://FIXME</url>
+    <url desc="Main Extension Page">https://github.com/agileware/au.com.agileware.limiteventbygroup</url>
+    <url desc="Documentation">https://github.com/agileware/au.com.agileware.limiteventbygroup</url>
+    <url desc="Support">https://agileware.com.au/contact</url>
     <url desc="Licensing">https://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
   <releaseDate>2025-11-28</releaseDate>
   <version>1.0.0</version>
-  <develStage>alpha</develStage>
-  <compatibility mode="semver">
-    <comments>Semantic versioning. For example, compatibility with "6.1" implies compatibility with "6.2".</comments>
+  <develStage>stable</develStage>
+  <compatibility>
     <ver>6.8</ver>
   </compatibility>
-  <php_compatibility mode="list">
-    <comments>Listed versions. For example, specify both "8.1" and "8.2".</comments>
-    <ver>8.0</ver>
-    <ver>8.1</ver>
-    <ver>8.2</ver>
-    <ver>8.3</ver>
-    <ver>8.4</ver>
-  </php_compatibility>
-  <smarty_compatibility mode="list">
-    <comments>Listed versions. For example, specify both "4" and "5".</comments>
-    <ver>5</ver>
-  </smarty_compatibility>
-  <comments>This is a new, undeveloped module</comments>
   <classloader>
     <psr0 prefix="CRM_" path="."/>
     <psr4 prefix="Civi\" path="Civi"/>
@@ -44,7 +29,6 @@
   <civix>
     <namespace>CRM/Limiteventbygroup</namespace>
     <format>25.10.2</format>
-    <angularModule>crmLimiteventbygroup</angularModule>
   </civix>
   <mixins>
     <mixin>mgd-php@2.0.0</mixin>
