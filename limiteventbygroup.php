@@ -50,22 +50,22 @@ function limiteventbygroup_civicrm_buildForm($formName, &$form) {
     ->addWhere('id', '=', $eventId)
     ->setLimit(1)
     ->execute()->first();
+
     // The group ID is a simple array value from the APIv4 result.
     // If the field is empty, $customFieldGroupId will be NULL.
     $customFieldGroupId = $events['Limit_Event.Limit_Event_Group'] ?? NULL;
 
     // Check for 'no group set' (anyone can register)
     if (empty($customFieldGroupId)) {
+      // Allow registration
       return; 
     }
 
     // If a group is required, the user must be logged in/identifiable.
     // Use the session ID here to check if *any* user is logged in to manage redirects.
     if (!$participantContactId || !CRM_Core_Session::getLoggedInContactID()) {
-      $message = ts('Registration is restricted. You must be logged in to access this form.');
-      CRM_Core_Session::setStatus($message, ts('Permission Denied: '), 'error');
-      CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "id=$eventId"));
-      return;
+      CRM_Utils_System::setTitle(ts('Event Registration Restricted'));
+      throw new CRM_Core_Exception(ts('Event Registration restricted. You must be logged in to register for this event.'));
     }
 
     // Check if the participant is in the required group using APIv4 (Recommended)
@@ -77,15 +77,15 @@ function limiteventbygroup_civicrm_buildForm($formName, &$form) {
         ->execute()->count(); // Returns 1 if found, 0 otherwise
     } catch (\CRM_Core_Exception $e) {
       Civi::log()->error('GroupContact get failed. Error: ' . $e->getMessage());
+      // Allow registration
       return;
     }
 
-
     // Block access if not a member.
     if (!$isMember) {
-      $message = ts('The participant is not a member of the required group for this event.');
-      CRM_Core_Session::setStatus($message, ts('Permission Denied: '), 'error');
-      CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "id=$eventId"));
+
+      CRM_Utils_System::setTitle(ts('Event Registration Restricted'));
+      throw new CRM_Core_Exception(ts('Event Registration restricted. You must be a member of the required group to register for this event.'));
     }
   }
 }
