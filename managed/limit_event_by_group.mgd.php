@@ -12,11 +12,12 @@ return [
       'version' => 4,
       'values' => [
         'name' => 'Limit_Event',
-        'title' => E::ts('Limit Event'), 
+        'title' => E::ts('Limit Event by Group'), 
         'extends' => 'Event',
         'weight' => 4,
         'collapse_adv_display' => TRUE,
         'is_active' => TRUE,
+        'is_public' => FALSE,
       ],
             'match' => [
         'name',
@@ -33,7 +34,7 @@ return [
       'values' => [
         'custom_group_id.name' => 'Limit_Event',
         'name' => 'Limit_Event_Group',
-        'label' => E::ts('Limit Event Group'),
+        'label' => E::ts('Group'),
         'data_type' => 'EntityReference',
         'html_type' => 'Autocomplete-Select',
         'is_searchable' => TRUE,
