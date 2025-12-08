@@ -65,7 +65,7 @@ function limiteventbygroup_civicrm_buildForm($formName, &$form) {
     // Use the session ID here to check if *any* user is logged in to manage redirects.
     if (!$participantContactId || !CRM_Core_Session::getLoggedInContactID()) {
       CRM_Utils_System::setTitle(ts('Event Registration Restricted'));
-      throw new CRM_Core_Exception(ts('Event Registration restricted. You must be logged in to register for this event.'));
+      throw new CRM_Core_Exception(ts('Event registration is restricted. You must be logged in to register for this event.'));
     }
 
     // Check if the participant is in the required group using APIv4 (Recommended)
@@ -85,7 +85,7 @@ function limiteventbygroup_civicrm_buildForm($formName, &$form) {
     if (!$isMember) {
 
       CRM_Utils_System::setTitle(ts('Event Registration Restricted'));
-      throw new CRM_Core_Exception(ts('Event Registration restricted. You must be a member of the required group to register for this event.'));
+      throw new CRM_Core_Exception(ts('Event registration is restricted. You must be a member of the required group to register for this event.'));
     }
   }
 }
