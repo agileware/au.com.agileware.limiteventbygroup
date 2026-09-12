@@ -198,6 +198,3 @@ function _limiteventbygroup_civix_fixNavigationMenuItems(&$nodes, &$maxNavID, $p
     }
   }
 }
-
-
-
